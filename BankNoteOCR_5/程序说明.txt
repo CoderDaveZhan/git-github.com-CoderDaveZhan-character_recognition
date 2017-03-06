@@ -1,0 +1,30 @@
+说明：如果Beforehand\Mat\目录下没有eigenface.mat、m.mat、train_set_fs.mat、class_set.mat文件，则需要依次运行Beforehand\下的脚本以生成这些文件。
+     如果存在这些文件，直接运行当前目录\中的主程序BankNoteOCR.m即可。
+
+Beforehand\  存放预备文件
+create_single_character.m  功能：生成归一化的单字符，存放于single_characters_for_training\目录下
+create_template_char.m  功能：生成模板字符，存放于letters_numbers\目录下
+create_train_set.m  功能：将模板字符以cell类型存储,即Mat\train_set.mat
+create_train_arg_fs.m  功能：调用pca.m函数，将模板字符降维，存储特征值、均值、pca降维特征，即Mat\eigenface.mat、Mat\m.mat、Mat\train_set_fs.mat
+create_class_set.m  功能：调用svmtrain.m函数、create_svm_train_set_fs.m函数，生成35种字符的2分类模型，存储结构体Mat\class_set.mat中
+
+被调用函数：
+create_svm_train_set_fs.m  功能：被函数create_class_set.m调用，将2位灰度转换成一维向量
+
+
+当前目录\
+BankNoteOCR.m  功能：程序的主函数
+
+被调用函数：
+get_area.m  功能：粗略提取号码区
+slant_correct.m  功能：倾斜矫正
+chose_char.m  功能：二值化
+character_separate.m  功能：去噪、单字符切分、归一化
+create_test_set_fs.m  功能：将待识别的单字符进行pca降维
+correlation_match.m  功能：用pca降维特征进行模板匹配
+feature_judge.m  功能：调用feature_recognize.m函数，将模板匹配结果做进一步的特征判定
+justify_belong_class.m  功能：如果特征判定结果和模板匹配结果不同，则调用svm.m函数，进行SVM识别
+
+feature_recognize.m  功能：特征判定(闭环数、上下左右横线数、开口方向、上下左右穿越交点数等)
+svm.m  功能：SVM特征分类
+
